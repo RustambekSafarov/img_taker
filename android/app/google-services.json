@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "951750594101",
+    "project_id": "image-saver-2fa22",
+    "storage_bucket": "image-saver-2fa22.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:951750594101:android:6b8a30f4805a3af35deb7c",
+        "android_client_info": {
+          "package_name": "com.example.img_taker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQyQdqNk6Coiy47rCWXvf1CrVRk3HL4_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

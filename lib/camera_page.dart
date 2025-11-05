@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +35,7 @@ class _CameraPageState extends State<CameraPage> {
       if (await imagesDir.exists()) {
         final files = imagesDir
             .listSync()
-            .where((item) => item is File)
+            .whereType<File>()
             .map((item) => item.path)
             .toList();
 
@@ -187,6 +189,7 @@ class _CameraPageState extends State<CameraPage> {
                           child: IconButton(
                             icon: const Icon(Icons.delete, color: Colors.white),
                             style: IconButton.styleFrom(
+                              // ignore: deprecated_member_use
                               backgroundColor: Colors.red.withOpacity(0.5),
                             ),
                             onPressed: () =>

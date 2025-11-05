@@ -7,18 +7,12 @@ PODS:
     - FlutterMacOS
   - permission_handler_apple (9.3.0):
     - Flutter
-  - saver_gallery (0.0.1):
-    - Flutter
-  - ultralytics_yolo (0.0.4):
-    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - saver_gallery (from `.symlinks/plugins/saver_gallery/ios`)
-  - ultralytics_yolo (from `.symlinks/plugins/ultralytics_yolo/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
@@ -29,18 +23,12 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
-  saver_gallery:
-    :path: ".symlinks/plugins/saver_gallery/ios"
-  ultralytics_yolo:
-    :path: ".symlinks/plugins/ultralytics_yolo/ios"
 
 SPEC CHECKSUMS:
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
   path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   permission_handler_apple: 4ed2196e43d0651e8ff7ca3483a069d469701f2d
-  saver_gallery: af2d0c762dafda254e0ad025ef0dabd6506cd490
-  ultralytics_yolo: 650ea1417a5b3ef9b1acc55e6edef5385018d3b5
 
 PODFILE CHECKSUM: 3c63482e143d1b91d2d2560aee9fb04ecc74ac7e
 

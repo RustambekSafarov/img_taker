@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyB3qh4WGfRAHUZbe0XsryIE9OdQcriDGhQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>951750594101</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.imgTaker</string>
+	<key>PROJECT_ID</key>
+	<string>image-saver-2fa22</string>
+	<key>STORAGE_BUCKET</key>
+	<string>image-saver-2fa22.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:951750594101:ios:baf0fc51dee9704e5deb7c</string>
+</dict>
+</plist>
