@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCQyQdqNk6Coiy47rCWXvf1CrVRk3HL4_I',
-    appId: '1:951750594101:android:6b8a30f4805a3af35deb7c',
+    appId: '1:951750594101:android:f52c085e2a6ea2885deb7c',
     messagingSenderId: '951750594101',
     projectId: 'image-saver-2fa22',
     storageBucket: 'image-saver-2fa22.firebasestorage.app',
@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB3qh4WGfRAHUZbe0XsryIE9OdQcriDGhQ',
-    appId: '1:951750594101:ios:baf0fc51dee9704e5deb7c',
+    appId: '1:951750594101:ios:5210d2e47aeca13b5deb7c',
     messagingSenderId: '951750594101',
     projectId: 'image-saver-2fa22',
     storageBucket: 'image-saver-2fa22.firebasestorage.app',

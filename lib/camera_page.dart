@@ -1,8 +1,10 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:img_taker/services/connectivity_service.dart';
+import 'package:img_taker/widgets/scaffold_message.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
@@ -17,11 +19,37 @@ class _CameraPageState extends State<CameraPage> {
   final ImagePicker _picker = ImagePicker();
   List<String> _savedImagePaths = [];
   bool _isLoading = false;
+  final ConnectivityService _connectivityService = ConnectivityService();
+  bool _isConnected = true;
 
   @override
   void initState() {
     super.initState();
+    _connectivityService.initialize();
     _loadSavedImages();
+
+    _connectivityService.connectionStatus.listen((isConnected) {
+      setState(() {
+        _isConnected = isConnected;
+      });
+
+      // Show snackbar
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        scaffoldMessenger(
+          context,
+          isConnected ? Icons.wifi : Icons.wifi_off,
+          isConnected ? 'Internet Connected' : 'No internet Connection',
+          isConnected ? true : false,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _connectivityService.dispose();
+    super.dispose();
   }
 
   // Load all saved images from app storage
@@ -65,7 +93,7 @@ class _CameraPageState extends State<CameraPage> {
         await _saveImageToStorage(image);
       }
     } catch (e) {
-      _showError('Failed to capture image: $e');
+      showError(context, 'Failed to capture image: $e');
     }
   }
 
@@ -94,9 +122,9 @@ class _CameraPageState extends State<CameraPage> {
       // Reload the images list
       await _loadSavedImages();
 
-      _showSuccess('Image saved successfully!');
+      showSuccess('Image saved successfully!', context);
     } catch (e) {
-      _showError('Failed to save image: $e');
+      showError(context, 'Failed to save image: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -108,35 +136,41 @@ class _CameraPageState extends State<CameraPage> {
       if (await file.exists()) {
         await file.delete();
         await _loadSavedImages();
-        _showSuccess('Image deleted');
+        showSuccess('Image deleted', context);
       }
     } catch (e) {
-      _showError('Failed to delete image: $e');
+      showError(context, 'Failed to delete image: $e');
     }
-  }
-
-  void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.red),
-    );
-  }
-
-  void _showSuccess(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.green),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: _isConnected
+            ? Icon(Icons.fiber_manual_record, color: Colors.green)
+            : Icon(Icons.fiber_manual_record, color: Colors.red),
         title: const Text('Image Storage'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.backup),
-            onPressed: _loadSavedImages,
-          ),
+          _isConnected
+              ? IconButton(
+                  onPressed: () => scaffoldMessenger(
+                    context,
+                    Icons.cloud_done,
+                    'Synced!',
+                    true,
+                  ),
+                  icon: Icon(Icons.cloud_done),
+                )
+              : IconButton(
+                  icon: const Icon(Icons.cloud_off),
+                  onPressed: () => scaffoldMessenger(
+                    context,
+                    Icons.wifi_off,
+                    'No internet connection!',
+                    false,
+                  ),
+                ),
         ],
       ),
       body: _isLoading
@@ -202,15 +236,13 @@ class _CameraPageState extends State<CameraPage> {
                 );
               },
             ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: 'camera',
-            onPressed: _pickImageFromCamera,
-            child: const Icon(Icons.camera_alt),
-          ),
-        ],
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: [BottomNavigationBarItem(icon: Icon(Icons.camera),)],
+      // ),
+      floatingActionButton: FloatingActionButton(
+        heroTag: 'camera',
+        onPressed: _pickImageFromCamera,
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
