@@ -26,6 +26,7 @@ class _AuthScreenState extends State<AuthScreen> {
     final token = await getToken();
     if (token != null) {
       // token is not null; handle accordingly
+      if (!mounted) return;
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -164,53 +165,56 @@ class _AuthScreenState extends State<AuthScreen> {
                     );
                   },
                 );
-                signIn(_phoneController.text, _passwordController.text).then((
-                  token,
-                ) {
-                  print(token);
-                  Navigator.of(context, rootNavigator: true).pop();
-                  if (token == 'error') {
-                    showDialog(
-                      context: context,
+                final token = await signIn(
+                  _phoneController.text,
+                  _passwordController.text,
+                );
+                print(token);
+                if (!mounted) return;
+                Navigator.of(context, rootNavigator: true).pop();
+                if (token == 'error') {
+                  if (!mounted) return;
+                  showDialog(
+                    context: context,
 
-                      builder: (BuildContext context) {
-                        return Dialog(
-                          backgroundColor: Colors.transparent,
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.error, color: Colors.white),
-                                SizedBox(height: 16),
-                                Text(
-                                  "Telefon raqam yoki parol noto'g'ri!",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
-                            ),
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        );
-                      },
-                    );
-                  } else {
-                    saveToken(token);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => VehicleListScreen(),
-                        settings: RouteSettings(arguments: {'token': token}),
-                      ),
-                    );
-                  }
-                });
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.error, color: Colors.white),
+                              SizedBox(height: 16),
+                              Text(
+                                "Telefon raqam yoki parol noto'g'ri!",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  await saveToken(token);
+                  if (!mounted) return;
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => VehicleListScreen(),
+                      settings: RouteSettings(arguments: {'token': token}),
+                    ),
+                  );
+                }
                 // saveToken(token).then((_) {
                 //
                 // });

@@ -80,6 +80,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                     );
 
                     if (image != null) {
+                      if (!mounted) return;
                       setState(() {
                         imageFront = image;
                         images.add({'image': image, 'type': 'front'});
@@ -88,6 +89,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                       });
                     }
                   } catch (e) {
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(e.toString()),
@@ -120,6 +122,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                     );
 
                     if (image != null) {
+                      if (!mounted) return;
                       setState(() {
                         imageRear = image;
                         images.add({'image': image, 'type': 'rear'});
@@ -128,6 +131,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                       });
                     }
                   } catch (e) {
+                    if (!mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(e.toString()),
@@ -160,6 +164,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                   maxHeight: 1800,
                 );
                 if (image != null) {
+                  if (!mounted) return;
                   setState(() {
                     imageInvoice = image;
                     images.add({'image': image, 'type': 'invoice'});
@@ -208,6 +213,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
 
             onPressed: () async {
               if (images.isEmpty) {
+                if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Please capture at least one image'),
@@ -217,6 +223,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
                 return;
               }
 
+              if (!mounted) return;
               setState(() => _isLoading = true);
               final savedImages = await saveToStorage(images);
               try {
@@ -233,13 +240,13 @@ class _CaptureScreenState extends State<CaptureScreen> {
                   timeStamp,
                   remotePaths: data['images'],
                 );
-                Navigator.pop(context);
+                if (mounted) Navigator.pop(context);
               } catch (e) {
                 print(e);
                 await saveObject(savedImages, eventType, timeStamp);
-                Navigator.pop(context);
+                if (mounted) Navigator.pop(context);
               } finally {
-                setState(() => _isLoading = false);
+                if (mounted) setState(() => _isLoading = false);
               }
             },
             child: Row(
