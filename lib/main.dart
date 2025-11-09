@@ -1,13 +1,13 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:img_taker/camera_page.dart';
-
-import 'services/firebase_options.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:img_taker/models/vehicle.dart';
+import 'package:img_taker/screens/auth_screen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(MyApp());
+  await Hive.initFlutter();
+  Hive.registerAdapter(VehicleModelAdapter());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,6 +15,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: CameraPage(), debugShowCheckedModeBanner: false);
+    return MaterialApp(home: AuthScreen(), debugShowCheckedModeBanner: false);
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:img_taker/screens/vehicle_list_screen.dart';
+import 'package:img_taker/services/backend.dart';
+import 'package:img_taker/services/token_save.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -8,8 +11,30 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  // bool _isloading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkToken();
+  }
+
+  Future<void> _checkToken() async {
+    // TODO: implement token check
+    final token = await getToken();
+    if (token != null) {
+      // token is not null; handle accordingly
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VehicleListScreen(),
+          settings: RouteSettings(arguments: {'token': token}),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
           SizedBox(height: MediaQuery.of(context).size.height / 10),
           Center(
             child: Text(
-              'Login',
+              'Tizimga Kirish',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
           ),
@@ -28,9 +53,11 @@ class _AuthScreenState extends State<AuthScreen> {
           SizedBox(
             width: MediaQuery.of(context).size.width / 1.1,
             child: TextField(
-              controller: _usernameController,
+              keyboardType: TextInputType.phone,
+              controller: _phoneController,
               decoration: InputDecoration(
-                labelText: 'Username',
+                prefix: Text('+998 '),
+                labelText: 'Telefon raqam',
 
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -69,7 +96,7 @@ class _AuthScreenState extends State<AuthScreen> {
             child: TextField(
               controller: _passwordController,
               decoration: InputDecoration(
-                labelText: 'Password',
+                labelText: 'Parol',
 
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -105,13 +132,93 @@ class _AuthScreenState extends State<AuthScreen> {
           SizedBox(height: MediaQuery.of(context).size.height / 40),
           SizedBox(
             width: MediaQuery.of(context).size.width / 1.3,
-            height: MediaQuery.of(context).size.height / 25,
+            height: MediaQuery.of(context).size.height / 20,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () async {
+                print(_phoneController.text);
+                print(_passwordController.text);
+                showDialog(
+                  context: context,
+
+                  builder: (BuildContext context) {
+                    return Dialog(
+                      backgroundColor: Colors.transparent,
+                      child: Container(
+                        padding: EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text(
+                              'Logging in...',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+                signIn(_phoneController.text, _passwordController.text).then((
+                  token,
+                ) {
+                  print(token);
+                  Navigator.of(context, rootNavigator: true).pop();
+                  if (token == 'error') {
+                    showDialog(
+                      context: context,
+
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          backgroundColor: Colors.transparent,
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.error, color: Colors.white),
+                                SizedBox(height: 16),
+                                Text(
+                                  "Telefon raqam yoki parol noto'g'ri!",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    saveToken(token);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VehicleListScreen(),
+                        settings: RouteSettings(arguments: {'token': token}),
+                      ),
+                    );
+                  }
+                });
+                // saveToken(token).then((_) {
+                //
+                // });
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
               ),
-              child: Text('Login', style: TextStyle(color: Colors.white)),
+              child: Text('Kirish', style: TextStyle(color: Colors.white)),
             ),
           ),
         ],
