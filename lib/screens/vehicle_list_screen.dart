@@ -8,6 +8,7 @@ import 'package:img_taker/screens/vehicle_detail_screen.dart';
 import 'package:img_taker/services/backend.dart';
 import 'package:img_taker/services/connectivity_service.dart';
 import 'package:img_taker/services/saving_service.dart';
+import 'package:img_taker/services/uploader_service.dart';
 import 'package:img_taker/services/token_save.dart';
 import 'package:img_taker/widgets/scaffold_message.dart';
 import 'package:intl/intl.dart';
@@ -35,10 +36,16 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
 
     // getAllEvents();
     _connectivityService.initialize();
-    _connectivityService.connectionStatus.listen((isConnected) {
+    _connectivityService.connectionStatus.listen((isConnected) async {
       setState(() {
         _isConnected = isConnected;
       });
+      // When reconnected, try to upload pending items
+      if (isConnected && token != null) {
+        await UploaderService().retryPendingUploads(token!);
+        _savedImagePaths = await getObjects();
+        setState(() {});
+      }
     });
   }
 

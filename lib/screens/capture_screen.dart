@@ -220,9 +220,10 @@ class _CaptureScreenState extends State<CaptureScreen> {
               setState(() => _isLoading = true);
               final savedImages = await saveToStorage(images);
               try {
+                // Use saved file paths for upload (images were saved to disk)
                 final data = await sendImage(
                   token,
-                  images,
+                  savedImages,
                   timeStamp,
                   eventType,
                 );

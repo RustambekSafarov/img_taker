@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:hive/hive.dart';
 import 'package:img_taker/models/vehicle.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 Future<void> saveObject(
   List<Map> paths,
@@ -16,6 +17,7 @@ Future<void> saveObject(
     remoteImagePaths: remotePaths,
     timeCreation: timeStamp.toIso8601String(),
     eventType: eventType,
+    isUploaded: remotePaths != null,
   );
   box.add(vehicle);
 }
@@ -31,6 +33,7 @@ Future<void> updateObject(List<Map> remotePaths, int index) async {
   final object = box.getAt(index);
   print("index at $object");
   object?.remoteImagePaths = remotePaths;
+  object?.isUploaded = true;
   await object?.save();
 }
 
@@ -45,9 +48,20 @@ Future<List<Map>> saveToStorage(List<Map> images) async {
   List<Map> savedImages = [];
 
   for (int i = 0; i < images.length; i++) {
-    String x = savedPath + images[i]['type'];
-    await images[i]['image'].saveTo(x);
-    savedImages.add({'image': x, 'type': images[i]['type']});
+    // Preserve original extension when saving. images[i]['image'] is expected to be an XFile
+    final dynamic img = images[i]['image'];
+    String originalPath = '';
+    try {
+      originalPath = img.path ?? '';
+    } catch (_) {
+      originalPath = '';
+    }
+    final ext = originalPath.isNotEmpty ? p.extension(originalPath) : '.jpg';
+    final filename = '${images[i]['type']}$ext';
+    final dest = p.join(savedPath, filename);
+    // XFile has saveTo; if not, this will throw and bubble up
+    await images[i]['image'].saveTo(dest);
+    savedImages.add({'image': dest, 'type': images[i]['type']});
   }
   return savedImages;
 }

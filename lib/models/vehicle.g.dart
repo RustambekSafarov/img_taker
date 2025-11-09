@@ -24,7 +24,7 @@ class VehicleModelAdapter extends TypeAdapter<VehicleModel> {
       eventType: fields[1] as String,
       remoteImagePaths: (fields[5] as List?)
           ?.map((dynamic e) => (e as Map).cast<dynamic, dynamic>())
-          ?.toList(),
+          .toList(),
       isUploaded: fields[3] as bool,
       licensePlate: fields[2] as String?,
     );

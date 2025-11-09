@@ -41,21 +41,34 @@ Future<Map> sendImage(
   final url = Uri.parse(
     '$baseUrl/vehicles/?event_type=$eventType&timestamp=${time.toIso8601String()}',
   );
-  var headers = {
-    "Authorization": "Bearer $token",
-    "Content-Type": "application/json",
-  };
+  // For multipart requests, let the MultipartRequest set Content-Type.
+  var headers = {"Authorization": "Bearer $token"};
   final request = http.MultipartRequest('POST', url);
   request.headers.addAll(headers);
 
   for (int i = 0; i < images.length; i++) {
-    print(images[i]['image']);
+    final filePath = images[i]['image'];
+    print(filePath);
+    final filename = basename(filePath);
+    final lower = filename.toLowerCase();
+    // Simple mime detection based on extension
+    MediaType contentType;
+    if (lower.endsWith('.png')) {
+      contentType = MediaType('image', 'png');
+    } else if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) {
+      contentType = MediaType('image', 'jpeg');
+    } else if (lower.endsWith('.webp')) {
+      contentType = MediaType('image', 'webp');
+    } else {
+      contentType = MediaType('application', 'octet-stream');
+    }
+
     request.files.add(
       await http.MultipartFile.fromPath(
         '${images[i]['type']}_image',
-        images[i]['image'],
-        filename: basename(images[i]['image']),
-        contentType: MediaType('image', 'png'),
+        filePath,
+        filename: filename,
+        contentType: contentType,
       ),
     );
   }
