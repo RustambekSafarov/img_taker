@@ -6,10 +6,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 Future<void> saveObject(
-  List<Map> paths,
+  List<Map<String, dynamic>> paths,
   String eventType,
   DateTime timeStamp, {
-  List<Map>? remotePaths,
+  List<Map<String, dynamic>>? remotePaths,
 }) async {
   final box = await Hive.openBox<VehicleModel>('vehicles');
   final vehicle = VehicleModel(
@@ -28,7 +28,10 @@ Future<List<VehicleModel>> getObjects() async {
   return box.values.toList();
 }
 
-Future<void> updateObject(List<Map> remotePaths, int index) async {
+Future<void> updateObject(
+  List<Map<String, dynamic>> remotePaths,
+  int index,
+) async {
   final box = await Hive.openBox<VehicleModel>('vehicles');
   final object = box.getAt(index);
   print("index at $object");
@@ -37,7 +40,9 @@ Future<void> updateObject(List<Map> remotePaths, int index) async {
   await object?.save();
 }
 
-Future<List<Map>> saveToStorage(List<Map> images) async {
+Future<List<Map<String, dynamic>>> saveToStorage(
+  List<Map<String, dynamic>> images,
+) async {
   final directory = await getApplicationDocumentsDirectory();
   final fileCollection = DateTime.now().toIso8601String();
   final imagesDir = Directory('${directory.path}/images/$fileCollection/');
@@ -45,7 +50,7 @@ Future<List<Map>> saveToStorage(List<Map> images) async {
     await imagesDir.create(recursive: true);
   }
   final savedPath = imagesDir.path;
-  List<Map> savedImages = [];
+  List<Map<String, dynamic>> savedImages = [];
 
   for (int i = 0; i < images.length; i++) {
     // Preserve original extension when saving. images[i]['image'] is expected to be an XFile
@@ -61,7 +66,10 @@ Future<List<Map>> saveToStorage(List<Map> images) async {
     final dest = p.join(savedPath, filename);
     // XFile has saveTo; if not, this will throw and bubble up
     await images[i]['image'].saveTo(dest);
-    savedImages.add({'image': dest, 'type': images[i]['type']});
+    savedImages.add(<String, dynamic>{
+      'image': dest,
+      'type': images[i]['type'],
+    });
   }
   return savedImages;
 }

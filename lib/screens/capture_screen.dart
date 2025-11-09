@@ -21,7 +21,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
   XFile? imageFront;
   XFile? imageRear;
   XFile? imageInvoice;
-  List<Map> images = [];
+  List<Map<String, dynamic>> images = [];
   final ImagePicker _picker = ImagePicker();
   int iconIndex = 0;
   final ConnectivityService _connectivityService = ConnectivityService();
@@ -83,7 +83,10 @@ class _CaptureScreenState extends State<CaptureScreen> {
                       if (!mounted) return;
                       setState(() {
                         imageFront = image;
-                        images.add({'image': image, 'type': 'front'});
+                        images.add(<String, dynamic>{
+                          'image': image,
+                          'type': 'front',
+                        });
                         print(images);
                         _isSvgF = false;
                       });
@@ -125,7 +128,10 @@ class _CaptureScreenState extends State<CaptureScreen> {
                       if (!mounted) return;
                       setState(() {
                         imageRear = image;
-                        images.add({'image': image, 'type': 'rear'});
+                        images.add(<String, dynamic>{
+                          'image': image,
+                          'type': 'rear',
+                        });
                         print(images);
                         _isSvgR = false;
                       });
@@ -167,7 +173,10 @@ class _CaptureScreenState extends State<CaptureScreen> {
                   if (!mounted) return;
                   setState(() {
                     imageInvoice = image;
-                    images.add({'image': image, 'type': 'invoice'});
+                    images.add(<String, dynamic>{
+                      'image': image,
+                      'type': 'invoice',
+                    });
                     print(images);
                     _isSvgI = false;
                   });

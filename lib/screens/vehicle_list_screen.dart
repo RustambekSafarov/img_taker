@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:img_taker/screens/capture_screen.dart';
 import 'package:img_taker/screens/vehicle_detail_screen.dart';
-import 'package:img_taker/services/backend.dart';
+
 import 'package:img_taker/services/connectivity_service.dart';
 import 'package:img_taker/services/saving_service.dart';
 import 'package:img_taker/services/uploader_service.dart';
@@ -22,7 +22,6 @@ class VehicleListScreen extends StatefulWidget {
 
 class _VehicleListScreenState extends State<VehicleListScreen> {
   final ConnectivityService _connectivityService = ConnectivityService();
-  List _isUploadInt = [];
   List _savedImagePaths = [];
   bool _isLoading = false;
   bool _isConnected = true;
@@ -76,25 +75,14 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
           _isConnected
               ? IconButton(
                   onPressed: () async {
-                    // int localImages = _isUploadInt.reduce((a, b) => a + b);
-                    _isLoading = true;
-
-                    for (int i = 0; i < _isUploadInt.length; i++) {
-                      await sendImage(
-                        token!,
-                        _isUploadInt[i].imagePaths,
-                        DateTime.parse(_isUploadInt[i].timeCreation),
-                        _isUploadInt[i].eventType,
-                      ).then((value) async {
-                        await updateObject(value['images'][i], i);
-                        setState(() {});
-                        print(value);
-                      });
+                    setState(() => _isLoading = true);
+                    try {
+                      await UploaderService().retryPendingUploads(token!);
+                      _savedImagePaths = await getObjects();
+                      setState(() {});
+                    } finally {
+                      setState(() => _isLoading = false);
                     }
-
-                    setState(() {
-                      _isLoading = false;
-                    });
                     // scaffoldMessenger(
                     //   context,
                     //   Icons.cloud_done,
@@ -121,14 +109,10 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
             padding: const EdgeInsets.all(8),
             itemCount: _savedImagePaths.length,
             itemBuilder: (context, index) {
-              print(_savedImagePaths[index].remoteImagePaths);
-              if (_savedImagePaths[index].remoteImagePaths != null) {
-                _isUploadInt.add(_savedImagePaths[index]);
-              }
               // print(_savedImagePaths[index].imagePaths);
               return Card(
                 child: ListTile(
-                  trailing: _savedImagePaths[index].remoteImagePaths != null
+                  trailing: _savedImagePaths[index].isUploaded
                       ? Icon(Icons.done)
                       : Icon(Icons.cloud_off),
 

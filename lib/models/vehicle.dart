@@ -17,10 +17,10 @@ class VehicleModel extends HiveObject {
   bool isUploaded;
 
   @HiveField(4)
-  List<Map> imagePaths;
+  List<Map<String, dynamic>> imagePaths;
 
   @HiveField(5)
-  List<Map>? remoteImagePaths;
+  List<Map<String, dynamic>>? remoteImagePaths;
 
   VehicleModel({
     required this.imagePaths,

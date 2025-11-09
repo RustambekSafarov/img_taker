@@ -50,25 +50,13 @@ Future<Map> sendImage(
     final filePath = images[i]['image'];
     print(filePath);
     final filename = basename(filePath);
-    final lower = filename.toLowerCase();
-    // Simple mime detection based on extension
-    MediaType contentType;
-    if (lower.endsWith('.png')) {
-      contentType = MediaType('image', 'png');
-    } else if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) {
-      contentType = MediaType('image', 'jpeg');
-    } else if (lower.endsWith('.webp')) {
-      contentType = MediaType('image', 'webp');
-    } else {
-      contentType = MediaType('application', 'octet-stream');
-    }
 
     request.files.add(
       await http.MultipartFile.fromPath(
         '${images[i]['type']}_image',
         filePath,
         filename: filename,
-        contentType: contentType,
+        contentType: MediaType('image', 'jpeg'),
       ),
     );
   }
@@ -77,5 +65,16 @@ Future<Map> sendImage(
   final res = await http.Response.fromStream(response);
   print(res.body);
   final data = jsonDecode(res.body);
+
+  // Ensure images array is properly cast to List<Map<String, dynamic>>
+  if (data['images'] != null && data['images'] is List) {
+    data['images'] = (data['images'] as List).map((item) {
+      if (item is Map) {
+        return Map<String, dynamic>.from(item);
+      }
+      return <String, dynamic>{};
+    }).toList();
+  }
+
   return data;
 }
