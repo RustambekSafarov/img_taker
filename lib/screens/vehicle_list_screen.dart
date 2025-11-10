@@ -179,7 +179,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            _savedImagePaths[index] == 'enter'
+                            _savedImagePaths[index].eventType == 'enter'
                                 ? 'Kirish'
                                 : 'Chiqish',
                             style: TextStyle(
