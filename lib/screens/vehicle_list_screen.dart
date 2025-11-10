@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:img_taker/screens/auth_screen.dart';
 import 'package:img_taker/screens/capture_screen.dart';
 import 'package:img_taker/screens/vehicle_detail_screen.dart';
 
@@ -55,7 +56,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   Future<void> _getVehicles() async {
     final vehicles = getObjects();
     _savedImagePaths = await vehicles;
-    setState(() {});
+    setState(() {
+      print(_savedImagePaths);
+    });
   }
   // Load all saved images from app storage
 
@@ -63,7 +66,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   Widget build(BuildContext context) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
+    // print(_savedImagePaths);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -72,6 +75,19 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
             : Icon(Icons.fiber_manual_record, color: Colors.red),
         title: const Text('Saqlanganlar'),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return AuthScreen();
+                  },
+                ),
+              );
+            },
+            child: Text('User', style: TextStyle(color: Colors.black)),
+          ),
           _isConnected
               ? IconButton(
                   onPressed: () async {
@@ -79,6 +95,12 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                     try {
                       await UploaderService().retryPendingUploads(token!);
                       _savedImagePaths = await getObjects();
+                      scaffoldMessenger(
+                        context,
+                        Icons.cloud_done,
+                        'Synced!',
+                        true,
+                      );
                       setState(() {});
                     } finally {
                       setState(() => _isLoading = false);
@@ -155,38 +177,37 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          for (
-                            int i = 0;
-                            i < _savedImagePaths[index].imagePaths.length;
-                            i++
-                          )
-                            Text(
-                              i != _savedImagePaths[index].imagePaths.length - 1
-                                  ? _savedImagePaths[index]
-                                            .imagePaths[i]['type'] +
-                                        ' • '
-                                  : _savedImagePaths[index]
-                                        .imagePaths[i]['type'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.w300,
-                                fontSize:
-                                    MediaQuery.of(context).size.width / 37,
-                              ),
+                          Text(
+                            (_savedImagePaths[index].imagePaths as List)
+                                .map((p) {
+                                  String type = p['type']?.toString() ?? '';
+                                  switch (type) {
+                                    case 'front':
+                                      return 'Old';
+                                    case 'rear':
+                                      return 'Orqa';
+                                    case 'invoice':
+                                      return 'Nakladnoy';
+                                    default:
+                                      return type;
+                                  }
+                                })
+                                .where((s) => s.isNotEmpty)
+                                .join(' • '),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w300,
+                              fontSize: MediaQuery.of(context).size.width / 37,
                             ),
+                            maxLines: 1,
+                          ),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            _savedImagePaths[index].eventType == 'enter'
-                                ? 'Kirish'
-                                : 'Chiqish',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: MediaQuery.of(context).size.width / 37,
-                            ),
-                          ),
+                          _savedImagePaths[index].eventType == 'enter'
+                              ? Icon(Icons.login, color: Colors.greenAccent)
+                              : Icon(Icons.logout, color: Colors.redAccent),
                         ],
                       ),
                     ],
@@ -195,7 +216,17 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
               );
             },
           ),
-          if (_isLoading) Center(child: CircularProgressIndicator()),
+          // if (_isLoading)
+          //   Center(
+          //     child: Opacity(
+          //       opacity: 0.5,
+          //       child: SizedBox(
+          //         width: double.infinity,
+          //         height: double.infinity,
+          //         child: CircularProgressIndicator(),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
 
@@ -230,6 +261,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                     ),
                   );
                   _savedImagePaths = await getObjects();
+                  await UploaderService().retryPendingUploads(token!);
                   setState(() {});
                 },
                 child: Row(
@@ -272,6 +304,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                     ),
                   );
                   _savedImagePaths = await getObjects();
+                  await UploaderService().retryPendingUploads(token!);
                   setState(() {});
                 },
                 child: Row(

@@ -24,7 +24,7 @@ Future<void> saveObject(
 
 Future<List<VehicleModel>> getObjects() async {
   final box = await Hive.openBox<VehicleModel>('vehicles');
-  print(box.values.toList());
+  // print(box.values.toList());
   return box.values.toList();
 }
 
@@ -65,7 +65,8 @@ Future<List<Map<String, dynamic>>> saveToStorage(
     final filename = '${images[i]['type']}$ext';
     final dest = p.join(savedPath, filename);
     // XFile has saveTo; if not, this will throw and bubble up
-    await images[i]['image'].saveTo(dest);
+    final file = images[i]['image'] as File;
+    await file.copy(dest);
     savedImages.add(<String, dynamic>{
       'image': dest,
       'type': images[i]['type'],

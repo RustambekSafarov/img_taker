@@ -96,6 +96,7 @@ class _AuthScreenState extends State<AuthScreen> {
             width: MediaQuery.of(context).size.width / 1.1,
             child: TextField(
               controller: _passwordController,
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Parol',
 

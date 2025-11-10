@@ -4,11 +4,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CarDetailWidget extends StatelessWidget {
   bool isSvg;
-  XFile image;
+  File image;
   String title;
   void Function()? func;
   double imagePadding;
@@ -63,34 +62,22 @@ class CarDetailWidget extends StatelessWidget {
                       ),
                       // : Image.file(File(image.path), fit: BoxFit.fitWidth),
                     )
-                  : Stack(
-                      children: [
-                        Center(
-                          child: Container(
-                            margin: EdgeInsets.all(
-                              MediaQuery.of(context).size.width / 30,
-                            ),
-                            width: MediaQuery.of(context).size.width / 3,
-                            height: MediaQuery.of(context).size.width / 3,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: FileImage(File(image.path)),
-                                fit: BoxFit.cover,
-                                opacity: 0.6,
-                              ),
-                              // shape: BoxShape.circle,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          ),
+                  : Center(
+                      child: Container(
+                        margin: EdgeInsets.all(
+                          MediaQuery.of(context).size.width / 30,
                         ),
-                        Center(
-                          child: Icon(
-                            Icons.done,
-                            color: Colors.green,
-                            size: MediaQuery.of(context).size.width / 3,
+                        width: MediaQuery.of(context).size.width / 3,
+                        height: MediaQuery.of(context).size.width / 3,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(File(image.path)),
+                            fit: BoxFit.cover,
                           ),
+                          // shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(15),
                         ),
-                      ],
+                      ),
                     ),
             ],
           ),

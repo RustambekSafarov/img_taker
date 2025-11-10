@@ -27,30 +27,10 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
           itemBuilder: (context, index) {
             return _buildImageSection(
               context,
-              title: 'Front Image',
+              title: images[index]['type'],
               imageUrl: images[index]['image'],
             );
           },
-          // children: [
-          //   // DateTime Title
-
-          //   // Front Image
-          //   ,
-
-          //   // Rear Image
-          //   _buildImageSection(
-          //     context,
-          //     title: 'Rear Image',
-          //     imageUrl: images[1]['image'],
-          //   ),
-
-          //   // Invoice Image
-          //   _buildImageSection(
-          //     context,
-          //     title: 'Invoice Image',
-          //     imageUrl: images[2]['image'],
-          //   ),
-          // ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -106,27 +86,26 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
       // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
+          title == 'front'
+              ? 'Oldi'
+              : title == 'rear'
+              ? 'Orqa'
+              : 'Nakladnoy',
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: MediaQuery.of(context).size.width / 37,
           ),
         ),
         const SizedBox(height: 8),
         GestureDetector(
           onTap: () {},
-          child: Container(
-            width: MediaQuery.of(context).size.width / 3,
-            height: MediaQuery.of(context).size.width / 3,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.grey.shade300),
-              color: Colors.grey.shade100,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.file(File(imageUrl), fit: BoxFit.contain),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.file(
+              File(imageUrl),
+              fit: BoxFit.cover,
+              width: MediaQuery.of(context).size.width / 2.5,
+              height: MediaQuery.of(context).size.width / 2.5,
             ),
           ),
         ),

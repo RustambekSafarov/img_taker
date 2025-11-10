@@ -24,7 +24,8 @@ class VehicleModelAdapter extends TypeAdapter<VehicleModel> {
       eventType: fields[1] as String,
       remoteImagePaths: (fields[5] as List?)
           ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
-          .toList(),
+          ?.toList(),
+      lastUpdate: fields[6] as DateTime?,
       isUploaded: fields[3] as bool,
       licensePlate: fields[2] as String?,
     );
@@ -33,7 +34,7 @@ class VehicleModelAdapter extends TypeAdapter<VehicleModel> {
   @override
   void write(BinaryWriter writer, VehicleModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.timeCreation)
       ..writeByte(1)
@@ -45,7 +46,9 @@ class VehicleModelAdapter extends TypeAdapter<VehicleModel> {
       ..writeByte(4)
       ..write(obj.imagePaths)
       ..writeByte(5)
-      ..write(obj.remoteImagePaths);
+      ..write(obj.remoteImagePaths)
+      ..writeByte(6)
+      ..write(obj.lastUpdate);
   }
 
   @override
