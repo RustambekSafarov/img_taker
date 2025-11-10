@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:img_taker/screens/vehicle_list_screen.dart';
 import 'package:img_taker/services/backend.dart';
 import 'package:img_taker/services/token_save.dart';
+import 'package:img_taker/services/updating_service.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -13,17 +14,21 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool isVisible = true;
   // bool _isloading = false;
 
   @override
   void initState() {
     super.initState();
     _checkToken();
+    checkAndClearIfExpired();
+    saveLastUpdateTime();
   }
 
   Future<void> _checkToken() async {
     // TODO: implement token check
-    final token = await getToken();
+    final data = await getToken();
+    final token = data![0];
     if (token != null) {
       // token is not null; handle accordingly
       if (!mounted) return;
@@ -96,8 +101,25 @@ class _AuthScreenState extends State<AuthScreen> {
             width: MediaQuery.of(context).size.width / 1.1,
             child: TextField(
               controller: _passwordController,
-              obscureText: true,
+              obscureText: isVisible,
+
               decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: Colors.grey,
+                  onPressed: () {
+                    setState(() {
+                      if (isVisible) {
+                        isVisible = false;
+                      } else {
+                        isVisible = true;
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    isVisible ? Icons.visibility : Icons.visibility_off,
+                  ),
+                ),
+
                 labelText: 'Parol',
 
                 border: OutlineInputBorder(
@@ -166,14 +188,16 @@ class _AuthScreenState extends State<AuthScreen> {
                     );
                   },
                 );
-                final token = await signIn(
+                final data = await signIn(
                   _phoneController.text,
                   _passwordController.text,
                 );
+                final token = data[0];
+                final user = data[1];
                 print(token);
                 if (!mounted) return;
                 Navigator.of(context, rootNavigator: true).pop();
-                if (token == 'error') {
+                if (token[0] == 'error') {
                   if (!mounted) return;
                   showDialog(
                     context: context,
@@ -206,7 +230,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     },
                   );
                 } else {
-                  await saveToken(token);
+                  await saveToken(token, user);
                   if (!mounted) return;
                   Navigator.pushReplacement(
                     context,

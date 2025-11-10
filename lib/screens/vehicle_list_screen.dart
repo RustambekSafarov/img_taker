@@ -26,7 +26,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   List _savedImagePaths = [];
   bool _isLoading = false;
   bool _isConnected = true;
+  List? data = [];
   String? token = '';
+  String? user = '';
 
   @override
   void initState() {
@@ -50,7 +52,9 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   }
 
   Future<void> _checkToken() async {
-    token = await getToken();
+    data = await getToken();
+    token = data![0];
+    user = data![1];
   }
 
   Future<void> _getVehicles() async {
@@ -75,19 +79,48 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
             : Icon(Icons.fiber_manual_record, color: Colors.red),
         title: const Text('Saqlanganlar'),
         actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return AuthScreen();
-                  },
-                ),
-              );
+          PopupMenuButton<String>(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                user ?? 'unknown',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ),
+            onSelected: (String value) {
+              if (value == 'logout') {
+                deleteToken();
+                Navigator.pushReplacement(
+                  context,
+
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return AuthScreen();
+                    },
+                  ),
+                );
+                print('logout');
+              }
             },
-            child: Text('User', style: TextStyle(color: Colors.black)),
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<String>(value: 'logout', child: Text('Logout')),
+            ],
           ),
+          // TextButton(
+          //   onPressed: () {
+          //     deleteToken();
+          //     Navigator.pushReplacement(
+          //       context,
+
+          //       MaterialPageRoute(
+          //         builder: (context) {
+          //           return AuthScreen();
+          //         },
+          //       ),
+          //     );
+          //   },
+          //   child: Text('User', style: TextStyle(color: Colors.black)),
+          // ),
           _isConnected
               ? IconButton(
                   onPressed: () async {

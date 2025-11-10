@@ -7,8 +7,13 @@ import 'package:img_taker/screens/auth_screen.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(VehicleModelAdapter());
+
+  
+  
   runApp(ProviderScope(child: MyApp()));
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

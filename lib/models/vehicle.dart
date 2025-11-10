@@ -22,15 +22,11 @@ class VehicleModel extends HiveObject {
   @HiveField(5)
   List<Map<String, dynamic>>? remoteImagePaths;
 
-  @HiveField(6)
-  DateTime? lastUpdate;
-
   VehicleModel({
     required this.imagePaths,
     required this.timeCreation,
     required this.eventType,
     this.remoteImagePaths,
-    this.lastUpdate,
     this.isUploaded = false,
     this.licensePlate,
   });

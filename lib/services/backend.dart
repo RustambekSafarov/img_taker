@@ -6,7 +6,7 @@ import 'package:http_parser/http_parser.dart';
 
 String baseUrl = 'https://absvision.ai/api/v1';
 
-Future<String> signIn(String phone, String password) async {
+Future<List> signIn(String phone, String password) async {
   final response = await http.post(
     Uri.parse('$baseUrl/auth/sign-in'),
     body: jsonEncode({"phone_number": "+998$phone", "password": password}),
@@ -15,7 +15,8 @@ Future<String> signIn(String phone, String password) async {
 
   Map jsonData = jsonDecode(response.body);
   print(response.statusCode);
-  return response.statusCode == 200 ? jsonData['access_token'] : 'error';
+  List data = [jsonData['access_token'], jsonData['user']['full_name']];
+  return response.statusCode == 200 ? data : ['error'];
 }
 
 Future<List> getVehicles(String token) async {

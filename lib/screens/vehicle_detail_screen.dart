@@ -16,7 +16,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     List images = args['data']!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Vehicle Details'), centerTitle: true),
+      appBar: AppBar(title: const Text('Mashina haqida'), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(
