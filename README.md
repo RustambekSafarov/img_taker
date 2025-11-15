@@ -31,8 +31,8 @@ The app allows capturing required vehicle photos and sending the data directly t
 ## 🏗️ How It Works
 
 1. Select **Enter** or **Exit**.
-2. Capture the required photos.
-3. Confirm and send the form.
+2. Capture the photos.
+3. Confirm, save and send the form.
 4. App uploads everything to the backend.
 
 Payload example:
@@ -40,7 +40,7 @@ Payload example:
 ```json
 {
   "event_type": "enter",
-  "vehicle_number": "XX-1234",
+  "license_plate": "XX-1234",
   "timestamp": "2025-01-01T12:00:00Z",
   "images": {
     "front": "file_data",
