@@ -1,16 +1,51 @@
-# img_taker
+# 🚗 Veemly – Vehicle Entry/Exit Capture App
 
-A new Flutter project.
+GateGuard is a mobile application designed to automate the work of gate guards in factories.  
+The app allows capturing required vehicle photos and sending the data directly to a backend system.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 📌 Features
 
-A few resources to get you started if this is your first Flutter project:
+- 📷 **Capture Vehicle Images**
+  - Front view
+  - Rear view
+  - Trunk / cargo area
+  - Invoice/document image
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- 🔄 **Event Types**
+  - **Enter** – when a vehicle enters the factory
+  - **Exit** – when a vehicle leaves the factory
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- 📤 **Automatic Data Upload**
+  - Sends all images and form data to the backend API.
+  - Prevents missing required photos.
+
+- 👮 **Built for Gate Guards**
+  - Fast workflow
+  - Simple UI
+  - Minimizes manual work
+
+---
+
+## 🏗️ How It Works
+
+1. Select **Enter** or **Exit**.
+2. Capture the required photos.
+3. Confirm and send the form.
+4. App uploads everything to the backend.
+
+Payload example:
+
+```json
+{
+  "event_type": "enter",
+  "vehicle_number": "XX-1234",
+  "timestamp": "2025-01-01T12:00:00Z",
+  "images": {
+    "front": "file_data",
+    "rear": "file_data",
+    "trunk": "file_data",
+    "invoice": "file_data"
+  }
+}
