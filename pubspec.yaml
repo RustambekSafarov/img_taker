@@ -1,4 +1,4 @@
-name: img_taker
+name: veemly
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -54,6 +54,7 @@ dependencies:
   intl: ^0.20.2
   http_parser: ^4.0.0
   workmanager: ^0.9.0+3
+  rename_app: ^1.6.5
 
 flutter_icons:
   android: true

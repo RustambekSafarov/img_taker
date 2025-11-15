@@ -3,15 +3,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:img_taker/screens/auth_screen.dart';
-import 'package:img_taker/screens/capture_screen.dart';
-import 'package:img_taker/screens/vehicle_detail_screen.dart';
+import 'package:veemly/screens/auth_screen.dart';
+import 'package:veemly/screens/capture_screen.dart';
+import 'package:veemly/screens/vehicle_detail_screen.dart';
 
-import 'package:img_taker/services/connectivity_service.dart';
-import 'package:img_taker/services/saving_service.dart';
-import 'package:img_taker/services/uploader_service.dart';
-import 'package:img_taker/services/token_save.dart';
-import 'package:img_taker/widgets/scaffold_message.dart';
+import 'package:veemly/services/connectivity_service.dart';
+import 'package:veemly/services/saving_service.dart';
+import 'package:veemly/services/uploader_service.dart';
+import 'package:veemly/services/token_save.dart';
+import 'package:veemly/widgets/scaffold_message.dart';
 import 'package:intl/intl.dart';
 
 class VehicleListScreen extends StatefulWidget {

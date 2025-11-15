@@ -5,10 +5,10 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:img_taker/services/camera_service.dart';
-import 'package:img_taker/services/connectivity_service.dart';
-import 'package:img_taker/services/saving_service.dart';
-import 'package:img_taker/widgets/vehicle_detail.dart';
+import 'package:veemly/services/camera_service.dart';
+import 'package:veemly/services/connectivity_service.dart';
+import 'package:veemly/services/saving_service.dart';
+import 'package:veemly/widgets/vehicle_detail.dart';
 
 class CaptureScreen extends StatefulWidget {
   const CaptureScreen({super.key});

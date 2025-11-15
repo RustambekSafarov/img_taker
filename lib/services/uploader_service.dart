@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
-import 'package:img_taker/models/vehicle.dart';
-import 'package:img_taker/services/backend.dart';
-import 'package:img_taker/services/saving_service.dart';
+import 'package:veemly/models/vehicle.dart';
+import 'package:veemly/services/backend.dart';
+import 'package:veemly/services/saving_service.dart';
 
 class UploaderService {
   static final UploaderService _instance = UploaderService._internal();

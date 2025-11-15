@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:img_taker/models/vehicle.dart';
-import 'package:img_taker/screens/auth_screen.dart';
+import 'package:veemly/models/vehicle.dart';
+import 'package:veemly/screens/auth_screen.dart';
 
 void main() async {
   await Hive.initFlutter();

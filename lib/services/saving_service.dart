@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:hive/hive.dart';
-import 'package:img_taker/models/vehicle.dart';
+import 'package:veemly/models/vehicle.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 

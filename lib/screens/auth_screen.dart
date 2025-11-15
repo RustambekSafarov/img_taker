@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:img_taker/screens/vehicle_list_screen.dart';
-import 'package:img_taker/services/backend.dart';
-import 'package:img_taker/services/token_save.dart';
-import 'package:img_taker/services/updating_service.dart';
+import 'package:veemly/screens/vehicle_list_screen.dart';
+import 'package:veemly/services/backend.dart';
+import 'package:veemly/services/token_save.dart';
+import 'package:veemly/services/updating_service.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
