@@ -106,21 +106,6 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
               PopupMenuItem<String>(value: 'logout', child: Text('Logout')),
             ],
           ),
-          // TextButton(
-          //   onPressed: () {
-          //     deleteToken();
-          //     Navigator.pushReplacement(
-          //       context,
-
-          //       MaterialPageRoute(
-          //         builder: (context) {
-          //           return AuthScreen();
-          //         },
-          //       ),
-          //     );
-          //   },
-          //   child: Text('User', style: TextStyle(color: Colors.black)),
-          // ),
           _isConnected
               ? IconButton(
                   onPressed: () async {
@@ -138,12 +123,6 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                     } finally {
                       setState(() => _isLoading = false);
                     }
-                    // scaffoldMessenger(
-                    //   context,
-                    //   Icons.cloud_done,
-                    //   'Synced!',
-                    //   true,
-                    // );
                   },
                   icon: Icon(Icons.cloud_done),
                 )
@@ -219,6 +198,8 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                                       return 'Old';
                                     case 'rear':
                                       return 'Orqa';
+                                    case 'trunk':
+                                      return 'Yukxona';
                                     case 'invoice':
                                       return 'Nakladnoy';
                                     default:

@@ -25,9 +25,11 @@ class _CaptureScreenState extends State<CaptureScreen> {
   bool _isSvgF = true;
   bool _isSvgR = true;
   bool _isSvgI = true;
+  bool _isSvgT = true;
   File? imageFront;
   File? imageRear;
   File? imageInvoice;
+  File? imageTrunk;
   List<Map<String, dynamic>> images = [];
   final ImagePicker _picker = ImagePicker();
   int iconIndex = 0;
@@ -137,7 +139,6 @@ class _CaptureScreenState extends State<CaptureScreen> {
                           ),
                         );
                       }
-                      _isSvgF = false;
                     },
                   ),
 
@@ -197,58 +198,105 @@ class _CaptureScreenState extends State<CaptureScreen> {
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height / 40),
-              CarDetailWidget(
-                isSvg: _isSvgI,
-                image: imageInvoice ?? File('assets/invoice.svg'),
-                title: 'Nakladnoy',
-                func: () async {
-                  timeStamp = DateTime.now();
-                  try {
-                    // final XFile? image = await _picker.pickImage(
-                    //   source: ImageSource.camera,
-                    //   maxWidth: 1800,
-                    //   maxHeight: 1800,
-                    // );
-                    final File? image = await Navigator.push<File>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const QuickCameraScreen(),
-                      ),
-                    );
-                    if (image != null) {
-                      if (!mounted) return;
-                      if (images.any((m) => m['type'] == 'invoice')) {
-                        images.removeWhere((m) => m['type'] == 'invoice');
+              Row(
+                children: [
+                  CarDetailWidget(
+                    isSvg: _isSvgT,
+                    image: imageTrunk ?? File('assets/trunk.svg'),
+                    title: 'Yukxona',
+                    func: () async {
+                      timeStamp = DateTime.now();
+                      try {
+                        final File? image = await Navigator.push<File>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const QuickCameraScreen(),
+                          ),
+                        );
+                        if (image != null) {
+                          if (!mounted) return;
+                          if (images.any((m) => m['type'] == 'trunk')) {
+                            images.removeWhere((m) => m['type'] == 'trunk');
+                          }
+                          setState(() {
+                            imageTrunk = image;
+                            // keep only the last invoice image (remove any previous invoice entry)
+                            images.add(<String, dynamic>{
+                              'image': image,
+                              'type': 'trunk',
+                            });
+                            print(images);
+                            _isSvgT = false;
+                          });
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                            backgroundColor: Colors.red,
+                            duration: const Duration(seconds: 3),
+                            behavior: SnackBarBehavior.floating,
+                            margin: const EdgeInsets.all(16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        );
                       }
-                      setState(() {
-                        imageInvoice = image;
-                        // keep only the last invoice image (remove any previous invoice entry)
-                        images.add(<String, dynamic>{
-                          'image': image,
-                          'type': 'invoice',
-                        });
-                        print(images);
-                        _isSvgI = false;
-                      });
-                    }
-                  } catch (e) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(e.toString()),
-                        backgroundColor: Colors.red,
-                        duration: const Duration(seconds: 3),
-                        behavior: SnackBarBehavior.floating,
-                        margin: const EdgeInsets.all(16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    );
-                  }
 
-                  print('invoice');
-                },
-                imagePadding: MediaQuery.of(context).size.height / 40,
+                      print('trunk');
+                    },
+                    imagePadding: MediaQuery.of(context).size.height / 40,
+                  ),
+                  CarDetailWidget(
+                    isSvg: _isSvgI,
+                    image: imageInvoice ?? File('assets/invoice.svg'),
+                    title: 'Nakladnoy',
+                    func: () async {
+                      timeStamp = DateTime.now();
+                      try {
+                        final File? image = await Navigator.push<File>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const QuickCameraScreen(),
+                          ),
+                        );
+                        if (image != null) {
+                          if (!mounted) return;
+                          if (images.any((m) => m['type'] == 'invoice')) {
+                            images.removeWhere((m) => m['type'] == 'invoice');
+                          }
+                          setState(() {
+                            imageInvoice = image;
+                            // keep only the last invoice image (remove any previous invoice entry)
+                            images.add(<String, dynamic>{
+                              'image': image,
+                              'type': 'invoice',
+                            });
+                            print(images);
+                            _isSvgI = false;
+                          });
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(e.toString()),
+                            backgroundColor: Colors.red,
+                            duration: const Duration(seconds: 3),
+                            behavior: SnackBarBehavior.floating,
+                            margin: const EdgeInsets.all(16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        );
+                      }
+
+                      print('invoice');
+                    },
+                    imagePadding: MediaQuery.of(context).size.height / 40,
+                  ),
+                ],
               ),
             ],
           ),
@@ -290,7 +338,7 @@ class _CaptureScreenState extends State<CaptureScreen> {
               setState(() => _isLoading = true);
               // sort images in order: front, rear, invoice
               final List<Map<String, dynamic>> sortedImages = [];
-              for (final t in ['front', 'rear', 'invoice']) {
+              for (final t in ['front', 'rear', 'trunk', 'invoice']) {
                 final matches = images.where((m) => m['type'] == t).toList();
                 if (matches.isNotEmpty) {
                   // for invoice keep the last one, for others keep the first match

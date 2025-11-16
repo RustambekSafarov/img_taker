@@ -90,6 +90,8 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
               ? 'Oldi'
               : title == 'rear'
               ? 'Orqa'
+              : title == 'trunk'
+              ? 'Yukxona'
               : 'Nakladnoy',
           style: TextStyle(
             fontWeight: FontWeight.w400,
@@ -104,8 +106,8 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
             child: Image.file(
               File(imageUrl),
               fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width / 2.5,
-              height: MediaQuery.of(context).size.width / 2.5,
+              width: MediaQuery.of(context).size.width / 2.6,
+              height: MediaQuery.of(context).size.width / 2.6,
             ),
           ),
         ),
