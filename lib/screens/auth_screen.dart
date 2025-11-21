@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:veemly/screens/vehicle_list_screen.dart';
 import 'package:veemly/services/backend.dart';
 import 'package:veemly/services/token_save.dart';
-import 'package:veemly/services/updating_service.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -21,8 +20,8 @@ class _AuthScreenState extends State<AuthScreen> {
   void initState() {
     super.initState();
     _checkToken();
-    checkAndClearIfExpired();
-    saveLastUpdateTime();
+    // checkAndClearIfExpired();
+    // saveLastUpdateTime();
   }
 
   Future<void> _checkToken() async {

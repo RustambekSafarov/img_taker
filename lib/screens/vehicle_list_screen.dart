@@ -21,7 +21,8 @@ class VehicleListScreen extends StatefulWidget {
   State<VehicleListScreen> createState() => _VehicleListScreenState();
 }
 
-class _VehicleListScreenState extends State<VehicleListScreen> {
+class _VehicleListScreenState extends State<VehicleListScreen>
+    with WidgetsBindingObserver {
   final ConnectivityService _connectivityService = ConnectivityService();
   List _savedImagePaths = [];
   bool _isLoading = false;
@@ -33,6 +34,7 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _checkToken();
     _getVehicles();
 
@@ -65,6 +67,21 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
     });
   }
   // Load all saved images from app storage
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      print("App resumed - refreshing data");
+      // Refresh your data here
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,12 +130,12 @@ class _VehicleListScreenState extends State<VehicleListScreen> {
                     try {
                       await UploaderService().retryPendingUploads(token!);
                       _savedImagePaths = await getObjects();
-                      scaffoldMessenger(
-                        context,
-                        Icons.cloud_done,
-                        'Synced!',
-                        true,
-                      );
+                      // scaffoldMessenger(
+                      //   context,
+                      //   Icons.cloud_done,
+                      //   'Synced!',
+                      //   true,
+                      // );
                       setState(() {});
                     } finally {
                       setState(() => _isLoading = false);

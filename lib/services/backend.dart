@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:http_parser/http_parser.dart';
 
-String baseUrl = 'https://report-apis.absvision.ai/veemly_api';
+String baseUrl = 'https://report-apis.absvision.ai/veemly_api/api/v1';
 
 Future<List> signIn(String phone, String password) async {
   final response = await http.post(
